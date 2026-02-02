@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h3>Your Posted Jobs</h3>
+
+<div class="card shadow p-4">
+  <table class="table table-striped table-bordered">
+    <thead class="table-dark">
+      <tr>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Skills</th>
+        <th>Salary</th>
+        <th>Posted</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for job in jobs %}
+      <tr>
+        <td>{{ job.title }}</td>
+        <td>{{ job.description|truncatechars:60 }}</td>
+        <td>{{ job.skills_required }}</td>
+        <td>{{ job.salary }}</td>
+        <td>{{ job.created_at }}</td>
+        <td>
+          <a href="{% url 'view_applicants' job.pk %}" class="btn btn-sm btn-primary">View Applicants</a>
+          <a href="{% url 'job_detail' job.pk %}" class="btn btn-sm btn-outline-secondary">View Job</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <a href="{% url 'create_job' %}" class="btn btn-success">Post New Job</a>
+</div>
+
+{% endblock %}

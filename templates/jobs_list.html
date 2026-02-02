@@ -1,0 +1,91 @@
+﻿{% extends 'base.html' %}
+{% block content %}
+
+<style>
+.job-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.job-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+}
+.skill-text {
+    font-size: 0.9rem;
+}
+</style>
+
+<div class="container my-5">
+
+    <!-- Header -->
+    <div class="mb-4">
+        <h2 class="fw-bold">Available Jobs</h2>
+        <p class="text-muted mb-0">
+            Personalized recommendations based on your skills
+        </p>
+    </div>
+
+    <!-- Job Cards -->
+    <div class="row g-4">
+
+        {% for item in job_data %}
+        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
+            <div class="card job-card h-100 border-0 shadow-sm">
+                <div class="card-body d-flex flex-column">
+
+                    <!-- Job Title -->
+                    <h5 class="card-title fw-semibold">
+                        {{ item.job.title }}
+                    </h5>
+
+                    <!-- Skills -->
+                    <p class="text-muted skill-text mb-3">
+                        <strong>Skills:</strong>
+                        {{ item.job.skills_required|default:"NA" }}
+                    </p>
+
+                    <!-- Match Score (Housewife only) -->
+                    {% if request.user.role == 'housewife' %}
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between">
+                            <small class="text-muted">Match Score</small>
+                            <small class="fw-bold">{{ item.match_score }}%</small>
+                        </div>
+                        <div class="progress" style="height: 8px;">
+                            <div class="progress-bar
+                                {% if item.match_score >= 70 %}
+                                    bg-success
+                                {% elif item.match_score >= 40 %}
+                                    bg-warning
+                                {% else %}
+                                    bg-danger
+                                {% endif %}
+                            "
+                            role="progressbar"
+                            style="width: {{ item.match_score }}%">
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Button -->
+                    <div class="mt-auto">
+                        <a href="{% url 'job_detail' item.job.id %}"
+                           class="btn btn-outline-primary w-100">
+                            View Details →
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        {% empty %}
+        <div class="col-12">
+            <p class="text-center text-muted">No jobs available</p>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+
+{% endblock %}

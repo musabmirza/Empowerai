@@ -1,0 +1,22 @@
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="mb-3">
+        <label class="form-label">Resume (PDF only)</label>
+        <input
+            type="file"
+            name="resume"
+            class="form-control"
+            accept=".pdf"
+            required
+        >
+        <small class="text-muted">
+    Allowed format: PDF | Max size: 2 MB
+</small>
+
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">
+        Upload & Analyze Resume
+    </button>
+</form>

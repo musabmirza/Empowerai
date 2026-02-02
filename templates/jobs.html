@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Available Jobs</h3>
+
+<div class="row">
+  {% for job in jobs %}
+  <div class="col-md-6 mb-3">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">{{ job.title }}</h5>
+        <p class="card-text text-truncate">{{ job.description }}</p>
+        <p><small class="text-muted">Skills: {{ job.skills_required }} • ₹{{ job.salary }}</small></p>
+        <a href="{% url 'job_detail' job.pk %}" class="btn btn-primary btn-sm">View Details</a>
+        {% if request.user == job.mentor %}
+          <a href="{% url 'view_applicants' job.pk %}" class="btn btn-secondary btn-sm">View Applicants</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <p>No jobs available yet.</p>
+  {% endfor %}
+</div>
+{% endblock %}

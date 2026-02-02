@@ -1,0 +1,88 @@
+﻿{% extends 'base.html' %}
+{% block content %}
+
+<div class="container my-5">
+
+    <h3 class="mb-2">Applicants for: {{ job.title }}</h3>
+    <p class="text-muted mb-4">Posted on {{ job.created_at }}</p>
+
+    <div class="card shadow-sm p-3">
+
+        {% for app in applicants %}
+        <div class="d-flex justify-content-between align-items-start gap-3
+                    border-bottom pb-3 mb-3">
+
+            <!-- Left info -->
+            <div class="flex-grow-1">
+                <h5 class="mb-1">{{ app.applicant.username }}</h5>
+
+                <p class="mb-1">
+                    <small class="text-muted">
+                        Applied at {{ app.applied_at }}
+                    </small>
+                </p>
+
+                <p class="mb-1">
+                    {{ app.cover_letter|default:"No cover letter provided" }}
+                </p>
+
+                <p class="mb-1">
+                    <strong>Status:</strong>
+
+                    {% if app.status == 'pending' %}
+                        <span class="badge bg-secondary">Pending</span>
+                    {% elif app.status == 'shortlisted' %}
+                        <span class="badge bg-success">Shortlisted</span>
+                    {% elif app.status == 'rejected' %}
+                        <span class="badge bg-danger">Rejected</span>
+                    {% endif %}
+                </p>
+
+                {% if app.applicant.resume %}
+                    <a href="{{ app.applicant.resume.url }}"
+                       target="_blank"
+                       class="btn btn-sm btn-outline-secondary mt-2">
+                        View Resume
+                    </a>
+                {% endif %}
+            </div>
+
+            <!-- Actions -->
+            <div class="text-end">
+
+                <form method="post" class="mb-1">
+                    {% csrf_token %}
+                    <input type="hidden" name="app_id" value="{{ app.id }}">
+                    <input type="hidden" name="action" value="shortlist">
+
+                    <button class="btn btn-success btn-sm"
+                            {% if app.status == 'shortlisted' %}disabled{% endif %}>
+                        Shortlist
+                    </button>
+                </form>
+
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="app_id" value="{{ app.id }}">
+                    <input type="hidden" name="action" value="reject">
+
+                    <button class="btn btn-danger btn-sm"
+                            {% if app.status == 'rejected' %}disabled{% endif %}>
+                        Reject
+                    </button>
+                </form>
+
+            </div>
+        </div>
+
+        {% empty %}
+            <p class="text-muted text-center mb-0">
+                No applicants yet.
+            </p>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

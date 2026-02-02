@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container mt-4">
+    <h3 class="mb-4">🔔 Notifications</h3>
+
+    {% for note in notifications %}
+        <div class="card mb-2 {% if not note.is_read %}border-primary{% endif %}">
+            <div class="card-body">
+                <p class="mb-1">{{ note.message }}</p>
+                <small class="text-muted">
+                    {{ note.created_at|date:"d M Y, h:i A" }}
+                </small>
+            </div>
+        </div>
+    {% empty %}
+        <p class="text-muted">No notifications yet.</p>
+    {% endfor %}
+</div>
+
+{% endblock %}

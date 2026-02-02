@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container my-5">
+    <h3 class="fw-bold mb-4">📋 My Applications</h3>
+
+    {% if applications %}
+    <div class="table-responsive">
+        <table class="table table-bordered align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Job Title</th>
+                    <th>Applied On</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for app in applications %}
+                <tr>
+                    <td>{{ app.job.title }}</td>
+                    <td>{{ app.applied_at|date:"d M Y" }}</td>
+                    <td>
+                        {% if app.status == 'pending' %}
+                            <span class="badge bg-warning text-dark">
+                                Pending
+                            </span>
+                        {% elif app.status == 'shortlisted' %}
+                            <span class="badge bg-success">
+                                Shortlisted
+                            </span>
+                        {% else %}
+                            <span class="badge bg-danger">
+                                Rejected
+                            </span>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <p class="text-muted">You have not applied to any jobs yet.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

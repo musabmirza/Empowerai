@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h3>Applicants for: {{ job.title }}</h3>
+<p class="text-muted mb-3">Posted on {{ job.created_at }}</p>
+
+<div class="card p-3">
+  {% for app in applicants %}
+    <div class="d-flex align-items-start gap-3 mb-3 border-bottom pb-2">
+      <div class="flex-grow-1">
+        <h5 class="mb-1">{{ app.applicant.username }}</h5>
+        <p class="mb-1"><small class="text-muted">Applied at {{ app.applied_at }}</small></p>
+        <p class="mb-1">{{ app.cover_letter|default:"No cover letter" }}</p>
+        <p class="mb-1"><strong>Status:</strong> {{ app.status }}</p>
+      </div>
+
+      <div class="text-end">
+        <!-- Shortlist form -->
+        <form method="post" style="display:inline-block;">
+          {% csrf_token %}
+          <input type="hidden" name="app_id" value="{{ app.id }}">
+          <input type="hidden" name="action" value="shortlist">
+          <button class="btn btn-success btn-sm mb-1" {% if app.status == 'shortlisted' %}disabled{% endif %}>
+            Shortlist
+          </button>
+        </form>
+
+        <!-- Reject form -->
+        <form method="post" style="display:inline-block;">
+          {% csrf_token %}
+          <input type="hidden" name="app_id" value="{{ app.id }}">
+          <input type="hidden" name="action" value="reject">
+          <button class="btn btn-danger btn-sm" {% if app.status == 'rejected' %}disabled{% endif %}>
+            Reject
+          </button>
+        </form>
+
+        <div class="mt-2">
+          <a href="{% url 'job_detail' job.pk %}" class="btn btn-outline-primary btn-sm">View Job</a>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <p>No applicants yet.</p>
+  {% endfor %}
+</div>
+
+{% endblock %}

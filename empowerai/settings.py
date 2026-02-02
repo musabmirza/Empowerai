@@ -30,6 +30,13 @@ DEBUG = True
 #     "http://localhost:3000",  # if React dev server
 #     "http://127.0.0.1:3000",
 # ]
+ALLOWED_HOSTS = [
+    "empowerai-wst7.onrender.com",
+    ".onrender.com"
+]
+
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
 
 
 
@@ -47,6 +54,7 @@ INSTALLED_APPS = [
     # 'rest_framework',
     # 'rest_framework_simplejwt.token_blacklist',  # optional
     # 'corsheaders',
+     'corsheaders',
 
 ]
 

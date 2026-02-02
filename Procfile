@@ -1,1 +1,1 @@
-web: gunicorn empowerai.wsgi
+web: gunicorn empowerai.wsgi:application
